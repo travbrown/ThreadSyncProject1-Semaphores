@@ -13,8 +13,8 @@
 #include  <sys/shm.h>
 #include <sys/wait.h>
 
-void depositMoney(int* bankAcc);
-void withdrawMoney(int* bankAcc);
+void depositMoney(int* bank_acc);
+void withdrawMoney(int* bank_acc);
 
 int  main(int  argc, char *argv[])
 {
@@ -47,12 +47,12 @@ int  main(int  argc, char *argv[])
           sleep(rand()%6);
           printf("Dear Old Dad: Attempting to Check Balance\n");\
           sem_wait(mutex);
-          int randomNumber = rand()%101;
-          if (randomNumber % 2 == 0){
+          int rand_num = rand()%101;
+          if (rand_num % 2 == 0){
             if (*counter_ptr < 100){
               depositMoney(counter_ptr);
             } else {
-              printf("Dear old Dad: Thinks Student has enough Cash ($%d)\n", *counter_ptr);
+              printf("Dear Old Dad: Thinks Student has enough Cash ($%d)\n", *counter_ptr);
             }
           }else{
             printf("Dear Old Dad: Last Checking Balance = $%d\n", *counter_ptr);
@@ -67,8 +67,8 @@ int  main(int  argc, char *argv[])
             sleep(rand()%6);
             printf("Poor Student: Attempting to Check Balance\n");  
             sem_wait(mutex);
-            int randomNumber = rand();
-            if (randomNumber%2 == 0){
+            int rand_num = rand();
+            if (rand_num%2 == 0){
               withdrawMoney(counter_ptr);
             }else{
               printf("Poor Student: Last Checking Balance = $%d\n", *counter_ptr);
@@ -88,28 +88,28 @@ int  main(int  argc, char *argv[])
     exit(0);
 }
 
-void depositMoney(int* bankAcc){
-  int localBalance = *bankAcc;
-  int amount = rand() % 101;
-  if (amount%2 == 0){
-    localBalance+= amount;
-    printf("Dear old Dad: Deposits $%d / Balance = $%d\n", amount, localBalance);
-    *bankAcc = localBalance;
+void depositMoney(int* bank_acc){
+  int local_balance = *bank_acc;
+  int amt = rand() % 101;
+  if ((amt%2) == 0){
+    local_balance += amt;
+    printf("Dear Old Dad: Deposits $%d / Balance = $%d\n", amt, local_balance);
+    *bank_acc = local_balance;
   }
   else{
-    printf("Dear old Dad: Doesn't have any money to give\n");
+    printf("Dear Old Dad: Doesn't have any money to give\n");
   }
 }
 
-void withdrawMoney(int* bankAcc){
-  int localBalance = *bankAcc;
+void withdrawMoney(int* bank_acc){
+  int local_balance = *bank_acc;
   int need = rand() % 51;
   printf("Poor Student needs $%d\n", need);
-  if (need <= localBalance){
-    localBalance -= need;
-    printf("Poor Student: Withdraws $%d / Balance = $%d\n", need, localBalance);
-    *bankAcc = localBalance;
+  if (need <= local_balance){
+    local_balance -= need;
+    printf("Poor Student: Withdraws $%d / Balance = $%d\n", need, local_balance);
+    *bank_acc = local_balance;
   }else{
-    ("Poor Student: Not Enough Cash ($%d)\n", localBalance);
+    ("Poor Student: Not Enough Cash ($%d)\n", local_balance);
   }
 }
